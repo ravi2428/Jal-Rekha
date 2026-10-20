@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<style id="lumi-runtime">
+/* luminous.css */
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:ital,wght@0,300..700;1,300..700&family=Google+Sans+Code:ital,wght,MONO@0,300..700,0..1;1,300..700,0..1&display=swap');
+
+:root {
+  --body-bg: transparent;
+  --ff-sans: 'Google Sans Flex', 'Google Sans Text', 'Google Sans', sans-serif;
+  --ff-mono: 'Google Sans Code', 'Google Sans Mono', monospace;
+
+  --lumi-sys-spacing--xxs: 2px;
+  --lumi-sys-spacing--xs: 4px;
+  --lumi-sys-spacing--s: 8px;
+  --lumi-sys-spacing--m: 12px;
+  --lumi-sys-spacing--l: 16px;
+  --lumi-sys-spacing--xl: 20px;
+
+  --lumi-sys-shape--small: 8px;
+  --lumi-sys-shape--medium: 12px;
+  --lumi-sys-shape--large: 16px;
+  --lumi-sys-shape--full: 999px;
+
+  --lumi-sys-color--surface: #fdfcfc;
+  --lumi-sys-color--surface-dim: #f2f0f0;
+  --lumi-sys-color--surface-bright: #ffffff;
+  --lumi-sys-color--surface-container: #f2f0f0;
+  --lumi-sys-color--surface-container-high: #e6e6e6;
+  --lumi-sys-color--on-surface: #000000;
+  --lumi-sys-color--on-surface-variant: rgba(0, 0, 0, 0.55);
+  
+  --lumi-sys-color--positive: #008052;
+  --lumi-sys-color--positive-container: #daf9d4;
+  --lumi-sys-color--error: #de2d29;
+  --lumi-sys-color--error-container: #ffdeec;
+  --lumi-sys-color--primary: #3186ff;
+  --lumi-sys-color--accent-container: #dcf1ff;
+  --lumi-sys-color--outline: #727676;
+  --lumi-sys-color--stroke-default: #e3e3e3;
+}
+
+:root[data-theme="dark"], body.dark-mode {
+  --body-bg: #0f0f0f;
+  --lumi-sys-color--surface: #0f0f0f;
+  --lumi-sys-color--surface-dim: #141414;
+  --lumi-sys-color--surface-bright: #1c1c1c;
+  --lumi-sys-color--surface-container: #141414;
+  --lumi-sys-color--surface-container-high: #1c1c1c;
+  --lumi-sys-color--on-surface: #e0e0e0;
+  --lumi-sys-color--on-surface-variant: rgba(255, 255, 255, 0.55);
+  
+  --lumi-sys-color--positive: #0ebc5f;
+  --lumi-sys-color--positive-container: #002220;
+  --lumi-sys-color--error: #ff4c45;
+  --lumi-sys-color--error-container: #3c0202;
+  --lumi-sys-color--primary: #9dd2ff;
+  --lumi-sys-color--accent-container: #192967;
+  --lumi-sys-color--outline: #9a9b9c;
+  --lumi-sys-color--stroke-default: #2d2f38;
+}
+
+:root {
+  --surface: var(--lumi-sys-color--surface);
+  --surface-dim: var(--lumi-sys-color--surface-dim);
+  --surface-bright: var(--lumi-sys-color--surface-bright);
+  --surface-container: var(--lumi-sys-color--surface-container);
+  --on-surface: var(--lumi-sys-color--on-surface);
+  --on-surface-variant: var(--lumi-sys-color--on-surface-variant);
+  --primary: var(--lumi-sys-color--primary);
+  --accent-container: var(--lumi-sys-color--accent-container);
+  --positive: var(--lumi-sys-color--positive);
+  --positive-container: var(--lumi-sys-color--positive-container);
+  --error: var(--lumi-sys-color--error);
+  --error-container: var(--lumi-sys-color--error-container);
+  --outline: var(--lumi-sys-color--outline);
+  --stroke-default: var(--lumi-sys-color--stroke-default);
+  --r-m: var(--lumi-sys-shape--medium);
+  --r-full: var(--lumi-sys-shape--full);
+}
+
+html, body {
+  background: var(--body-bg, transparent) !important;
+  color: var(--on-surface) !important;
+  overflow-y: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.widget-container { width: 100% !important; max-width: 100% !important; padding-inline: 0 !important; box-sizing: border-box; }
+svg text { stroke: none; paint-order: fill; }
+</style>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jal-Rekha | Proposed Test Flow</title>
+  <style>
+    .widget-container {
+      width: 100%;
+      min-height: 280px;
+      padding-inline: 0;
+      overflow-x: hidden;
+      box-sizing: border-box;
+      font-family: var(--ff-sans);
+      color: var(--on-surface);
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow-y: auto;
+      background: transparent;
+    }
+
+    .diagram-svg {
+      display: block;
+      width: 100%;
+      max-width: 864px;
+      height: auto;
+      margin: 0 auto;
+      user-select: none;
+    }
+
+    .zone-bg {
+      fill: var(--surface-dim);
+      stroke: var(--stroke-default);
+      stroke-width: 1;
+      rx: 16px;
+    }
+
+    .lane-label {
+      font-family: var(--ff-mono);
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      fill: var(--on-surface-variant);
+    }
+
+    .zone-title {
+      font-family: var(--ff-mono);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      fill: var(--on-surface-variant);
+      text-transform: uppercase;
+    }
+
+    .node-group {
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+    }
+
+    .node-rect {
+      fill: var(--surface-container);
+      stroke: var(--outline);
+      stroke-width: 1.2;
+      transition: fill 0.2s ease, stroke 0.2s ease, stroke-width 0.2s ease;
+    }
+
+    .node-group:hover .node-rect,
+    .node-group.is-active .node-rect {
+      fill: var(--accent-container);
+      stroke: var(--primary);
+      stroke-width: 2;
+    }
+
+    .node-text-title {
+      font-family: var(--ff-sans);
+      font-size: 13px;
+      font-weight: 500;
+      fill: var(--on-surface);
+      pointer-events: none;
+      text-anchor: middle;
+      paint-order: fill;
+      stroke: none;
+    }
+
+    .node-text-sub {
+      font-family: var(--ff-mono);
+      font-size: 12px;
+      font-style: italic;
+      fill: var(--on-surface-variant);
+      pointer-events: none;
+      text-anchor: middle;
+      paint-order: fill;
+      stroke: none;
+    }
+
+    .node-outcome-pass .node-rect { fill: var(--positive-container); stroke: var(--positive); }
+    .node-outcome-invalid .node-rect { fill: var(--error-container); stroke: var(--error); }
+    .node-outcome-suspect .node-rect { fill: var(--surface-bright); stroke: var(--primary); }
+
+    .edge-path {
+      fill: none;
+      stroke: var(--on-surface);
+      stroke-width: 1.3;
+      stroke-linecap: round;
+      stroke-dasharray: 0 4;
+      pointer-events: none;
+      transition: stroke 0.2s ease, stroke-width 0.2s ease;
+    }
+
+    .edge-path.is-highlighted {
+      stroke: var(--primary);
+      stroke-width: 2;
+      stroke-dasharray: none;
+    }
+
+    .pill-bg {
+      fill: var(--surface-bright);
+      stroke: var(--stroke-default);
+      stroke-width: 1;
+      rx: 8px;
+    }
+
+    .pill-text {
+      font-family: var(--ff-mono);
+      font-size: 12px;
+      font-style: italic;
+      fill: var(--on-surface);
+      text-anchor: middle;
+      dominant-baseline: central;
+      pointer-events: none;
+    }
+
+    .detail-card {
+      max-width: 680px;
+      margin: 12px auto 0;
+      padding: 14px 16px;
+      background: var(--surface-bright);
+      border: 1px solid var(--stroke-default);
+      border-radius: var(--r-m, 12px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      box-sizing: border-box;
+      transition: all 0.2s ease;
+    }
+
+    .detail-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .detail-tag {
+      font-family: var(--ff-mono);
+      font-size: 12px;
+      padding: 2px 8px;
+      border-radius: var(--r-full, 999px);
+      background: var(--surface-container);
+      color: var(--primary);
+      font-weight: 500;
+    }
+
+    .detail-title { font-size: 15px; font-weight: 600; color: var(--on-surface); margin: 0; }
+    .detail-desc { font-size: 13px; line-height: 1.45; color: var(--on-surface-variant); margin: 0; }
+    .node-popup { position: fixed; z-index: 1000; width: 280px; margin: 0; pointer-events: none; display: none; }
+    .node-popup.is-visible { display: block; }
+  
+    :root { --warn: #8a5a00; --warn-container: #fff1c9; }
+    :root[data-theme="dark"] { --warn: #ffc65c; --warn-container: #3a2a00; }
+    .node-outcome-warn .node-rect { fill: var(--warn-container); stroke: var(--warn); }
+    .intro-card { max-width: 800px; margin: 16px auto 14px; padding: 16px 18px; background: var(--surface-bright); border: 1px solid var(--stroke-default); border-radius: var(--r-m, 12px); box-sizing: border-box; }
+    .intro-card h2 { font-size: 16px; font-weight: 600; margin: 0 0 8px; }
+    .intro-card p { font-size: 13px; line-height: 1.55; color: var(--on-surface-variant); margin: 0 0 8px; }
+    .intro-card p:last-child { margin-bottom: 0; }
+    .intro-card b { color: var(--on-surface); font-weight: 600; }
+    @media (max-width: 600px) { .intro-card { margin-inline: 8px; } }
+    .page-heading {
+      max-width: 864px;
+      margin: 8px auto 14px;
+      padding: 0 12px 12px;
+      border-bottom: 2px solid var(--stroke-default);
+      box-sizing: border-box;
+    }
+    .page-heading h1 {
+      margin: 0;
+      color: var(--on-surface);
+      font-family: var(--ff-sans);
+      font-size: clamp(22px, 3vw, 30px);
+      line-height: 1.2;
+      font-weight: 700;
+      letter-spacing: -0.035em;
+    }
+    .page-heading h1::after {
+      content: "";
+      display: block;
+      width: 58px;
+      height: 4px;
+      margin-top: 9px;
+      border-radius: 4px;
+      background: var(--primary);
+    }
+    @media (max-width: 600px) { .page-heading { margin-inline: 8px; padding-inline: 4px; } }
+  </style>
+</head>
+<body>
+  <div class="widget-container" id="app">
+    <header class="page-heading"><h1>Jal-Rekha: How It Works</h1></header>
+    <svg class="diagram-svg" viewBox="0 0 864 1140" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="lumi-caret" viewBox="0 0 10 10" refX="7.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto">
+          <path d="M 3 1.2 L 7.5 5 L 3 8.8" fill="none" stroke="var(--on-surface)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+        <marker id="lumi-caret-active" viewBox="0 0 10 10" refX="7.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto">
+          <path d="M 3 1.2 L 7.5 5 L 3 8.8" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+      <rect class="zone-bg" x="12" y="12" width="840" height="140" />
+      <text class="zone-title" x="32" y="38">STEP 1: COLLECT THE SAMPLE</text>
+      <rect class="zone-bg" x="12" y="168" width="840" height="140" />
+      <text class="zone-title" x="32" y="194">STEP 2: PRE-TREAT THE SAMPLE</text>
+      <rect class="zone-bg" x="12" y="324" width="840" height="140" />
+      <text class="zone-title" x="32" y="350">STEP 3: THE CHLORINE REACTION</text>
+      <rect class="zone-bg" x="12" y="480" width="840" height="140" />
+      <text class="zone-title" x="32" y="506">STEP 4: CONTROL THE SAMPLE VOLUME (DESIGN GOAL)</text>
+      <rect class="zone-bg" x="12" y="636" width="840" height="480" />
+      <text class="zone-title" x="32" y="662">STEP 5: READ THE BAR</text>
+      <text class="lane-label" x="44" y="688">OPTION A: READ THE MARKS BY EYE</text>
+      <text class="lane-label" x="44" y="916">OPTION B: PHONE READING (PLANNED)</text>
+      <path id="edge-1-2" class="edge-path" d="M 224 98 L 248 98" marker-end="url(#lumi-caret)" fill="none" />
+      <path id="edge-2-3" class="edge-path" d="M 428 98 L 452 98" marker-end="url(#lumi-caret)" fill="none" />
+      <path id="edge-3-4" class="edge-path" d="M 632 98 L 656 98" marker-end="url(#lumi-caret)" fill="none" />
+      <path id="edge-4-5" class="edge-path" d="M 746 128 L 746 224" marker-end="url(#lumi-caret)" fill="none" />
+      <path id="edge-5-6" class="edge-path" d="M 656 254 L 632 254" marker-end="url(#lumi-caret)" fill="none" />
+      <path id="edge-6-7" class="edge-path" d="M 452 254 L 428 254" marker-end="url(#lumi-caret)" fill="none" />
+      <path id="edge-7-8" class="edge-path" d="M 248 254 L 224 254" marker-end="url(#lumi-caret)" fill="none" />
+      <path id="edge-8-9" class="edge-path" d="M 134 284 L 134 312 Q 134 320 126 320 L 28 320 Q 20 320 20 328 L 20 402 Q 20 410 28 410 L 44 410" marker-end="url(#lumi-caret)" fill="none" />
+      <path id="edge-9-10" class="edge-path" d="M 224 410 L 248 410" marker-end="url(#lumi-caret)" fill="none" />
+      <path id="edge-10-11" class="edge-path" d="M 428 410 L 452 410" marker-end="url(#lumi-caret)" fill="none" />
+      <path id="edge-11-12" class="edge-path" d="M 632 410 L 656 410" marker-end="url(#lumi-caret)" fill="none" />
+      <path id="edge-12-13" class="edge-path" d="M 746 440 L 746 536" marker-end="url(#lumi-caret)" fill="none" />
+      <path id="edge-13-14" class="edge-path" d="M 656 566 L 632 566" marker-end="url(#lumi-caret)" fill="none" />
+      <path id="edge-14-15" class="edge-path" d="M 452 566 L 428 566" marker-end="url(#lumi-caret)" fill="none" />
+      <path id="edge-15-16" class="edge-path" d="M 248 566 L 224 566" marker-end="url(#lumi-caret)" fill="none" />
+      <path id="edge-16-17" class="edge-path" d="M 44 566 L 34 566 Q 26 566 26 574 L 26 736 Q 26 744 34 744 L 44 744" marker-end="url(#lumi-caret)" fill="none" />
+      <path id="edge-16-22" class="edge-path" d="M 44 566 L 34 566 Q 26 566 26 574 L 26 954 Q 26 962 34 962 L 44 962" marker-end="url(#lumi-caret)" fill="none" />
+      <path id="edge-17-18" class="edge-path" d="M 134 784 L 134 840" marker-end="url(#lumi-caret)" fill="none" />
+      <path id="edge-17-19" class="edge-path" d="M 134 784 L 134 804 Q 134 812 142 812 L 330 812 Q 338 812 338 820 L 338 840" marker-end="url(#lumi-caret)" fill="none" />
+      <path id="edge-17-20" class="edge-path" d="M 134 784 L 134 804 Q 134 812 142 812 L 534 812 Q 542 812 542 820 L 542 840" marker-end="url(#lumi-caret)" fill="none" />
+      <path id="edge-17-21" class="edge-path" d="M 134 784 L 134 804 Q 134 812 142 812 L 738 812 Q 746 812 746 820 L 746 840" marker-end="url(#lumi-caret)" fill="none" />
+      <path id="edge-22-23" class="edge-path" d="M 224 962 L 248 962" marker-end="url(#lumi-caret)" fill="none" />
+      <path id="edge-23-24" class="edge-path" d="M 428 962 L 452 962" marker-end="url(#lumi-caret)" fill="none" />
+      <path id="edge-24-25" class="edge-path" d="M 632 962 L 656 962" marker-end="url(#lumi-caret)" fill="none" />
+      <path id="edge-25-26" class="edge-path" d="M 746 992 L 746 1032" marker-end="url(#lumi-caret)" fill="none" />
+      <path id="edge-26-27" class="edge-path" d="M 656 1062 L 632 1062" marker-end="url(#lumi-caret)" fill="none" />
+      <path id="edge-27-28" class="edge-path" d="M 452 1062 L 428 1062" marker-end="url(#lumi-caret)" fill="none" />
+      <g class="pill" transform="translate(134, 823)">
+        <rect class="pill-bg" x="-50" y="-11" width="100" height="22" />
+        <text class="pill-text" x="0" y="0">Under 10.1 mm</text>
+      </g>
+      <g class="pill" transform="translate(338, 823)">
+        <rect class="pill-bg" x="-50" y="-11" width="100" height="22" />
+        <text class="pill-text" x="0" y="0">10.1–24.1 mm</text>
+      </g>
+      <g class="pill" transform="translate(542, 823)">
+        <rect class="pill-bg" x="-50" y="-11" width="100" height="22" />
+        <text class="pill-text" x="0" y="0">24.1–47.1 mm</text>
+      </g>
+      <g class="pill" transform="translate(746, 823)">
+        <rect class="pill-bg" x="-50" y="-11" width="100" height="22" />
+        <text class="pill-text" x="0" y="0">47.1 mm or more</text>
+      </g>
+      <g class="node-group" id="node-1" transform="translate(44, 68)">
+        <rect class="node-rect" width="180" height="60" rx="30" />
+        <text class="node-text-title" x="90" y="34">1. WATER TAP</text>
+      </g>
+      <g class="node-group" id="node-2" transform="translate(248, 68)">
+        <rect class="node-rect" width="180" height="60" rx="12" />
+        <text class="node-text-title" x="90" y="34">2. FLUSH THE TAP</text>
+      </g>
+      <g class="node-group" id="node-3" transform="translate(452, 68)">
+        <rect class="node-rect" width="180" height="60" rx="12" />
+        <text class="node-text-title" x="90" y="34">3. RINSE THE CUP ×2</text>
+      </g>
+      <g class="node-group" id="node-4" transform="translate(656, 68)">
+        <rect class="node-rect" width="180" height="60" rx="12" />
+        <text class="node-text-title" x="90" y="34">4. FILL TO THE LINE</text>
+      </g>
+      <g class="node-group" id="node-5" transform="translate(656, 224)">
+        <rect class="node-rect" width="180" height="60" rx="12" />
+        <text class="node-text-title" x="90" y="34">5. DIP THE CARD</text>
+      </g>
+      <g class="node-group" id="node-6" transform="translate(452, 224)">
+        <rect class="node-rect" width="180" height="60" rx="12" />
+        <text class="node-text-title" x="90" y="34">6. SILT FILTER</text>
+      </g>
+      <g class="node-group" id="node-7" transform="translate(248, 224)">
+        <rect class="node-rect" width="180" height="60" rx="12" />
+        <text class="node-text-title" x="90" y="34">7. pH BUFFER</text>
+      </g>
+      <g class="node-group" id="node-8" transform="translate(44, 224)">
+        <rect class="node-rect" width="180" height="60" rx="12" />
+        <text class="node-text-title" x="90" y="34">8. IRON-BINDING PAD</text>
+      </g>
+      <g class="node-group" id="node-9" transform="translate(44, 380)">
+        <rect class="node-rect" width="180" height="60" rx="12" />
+        <text class="node-text-title" x="90" y="34">9. REACTION LANE</text>
+      </g>
+      <g class="node-group" id="node-10" transform="translate(248, 380)">
+        <rect class="node-rect" width="180" height="60" rx="12" />
+        <text class="node-text-title" x="90" y="34">10. CHLORINE REACTS WITH DYE</text>
+      </g>
+      <g class="node-group" id="node-11" transform="translate(452, 380)">
+        <rect class="node-rect" width="180" height="60" rx="12" />
+        <text class="node-text-title" x="90" y="34">11. PURPLE BAR FORMS</text>
+      </g>
+      <g class="node-group" id="node-12" transform="translate(656, 380)">
+        <rect class="node-rect" width="180" height="60" rx="12" />
+        <text class="node-text-title" x="90" y="34">12. FLOW RATE</text>
+      </g>
+      <g class="node-group" id="node-13" transform="translate(656, 536)">
+        <rect class="node-rect" width="180" height="60" rx="12" />
+        <text class="node-text-title" x="90" y="34">13. ABSORBENT WICK</text>
+      </g>
+      <g class="node-group" id="node-14" transform="translate(452, 536)">
+        <rect class="node-rect" width="180" height="60" rx="12" />
+        <text class="node-text-title" x="90" y="34">14. VOLUME LIMIT (TO VERIFY)</text>
+      </g>
+      <g class="node-group" id="node-15" transform="translate(248, 536)">
+        <rect class="node-rect" width="180" height="60" rx="12" />
+        <text class="node-text-title" x="90" y="34">15. FLOW ENDS (TO VERIFY)</text>
+      </g>
+      <g class="node-group" id="node-16" transform="translate(44, 536)">
+        <rect class="node-rect" width="180" height="60" rx="12" />
+        <text class="node-text-title" x="90" y="34">16. TEST COMPLETE MARK</text>
+      </g>
+      <g class="node-group node-outcome-invalid" id="node-18" transform="translate(44, 840)">
+        <rect class="node-rect" width="180" height="40" rx="20" />
+        <text class="node-text-title" x="90" y="24" font-size="12">18. BELOW 0.2 mg/L</text>
+      </g>
+      <g class="node-group node-outcome-pass" id="node-19" transform="translate(248, 840)">
+        <rect class="node-rect" width="180" height="40" rx="20" />
+        <text class="node-text-title" x="90" y="24" font-size="12">19. 0.2–0.5 mg/L RANGE</text>
+      </g>
+      <g class="node-group node-outcome-warn" id="node-20" transform="translate(452, 840)">
+        <rect class="node-rect" width="180" height="40" rx="20" />
+        <text class="node-text-title" x="90" y="24" font-size="12">20. 0.5–1.0 mg/L RANGE</text>
+      </g>
+      <g class="node-group node-outcome-invalid" id="node-21" transform="translate(656, 840)">
+        <rect class="node-rect" width="180" height="40" rx="20" />
+        <text class="node-text-title" x="90" y="24" font-size="12">21. ABOVE 1.0 mg/L</text>
+      </g>
+      <g class="node-group" id="node-22" transform="translate(44, 932)">
+        <rect class="node-rect" width="180" height="60" rx="30" />
+        <text class="node-text-title" x="90" y="34">22. OPEN THE OPTIONAL APP</text>
+      </g>
+      <g class="node-group" id="node-23" transform="translate(248, 932)">
+        <rect class="node-rect" width="180" height="60" rx="12" />
+        <text class="node-text-title" x="90" y="34">23. SCAN THE CARD CODE</text>
+      </g>
+      <g class="node-group" id="node-24" transform="translate(452, 932)">
+        <rect class="node-rect" width="180" height="60" rx="12" />
+        <text class="node-text-title" x="90" y="34">24. CORRECT PHOTO ANGLE</text>
+      </g>
+      <g class="node-group" id="node-25" transform="translate(656, 932)">
+        <rect class="node-rect" width="180" height="60" rx="12" />
+        <text class="node-text-title" x="90" y="34">25. MEASURE THE BAR</text>
+      </g>
+      <g class="node-group" id="node-26" transform="translate(656, 1032)">
+        <rect class="node-rect" width="180" height="60" rx="12" />
+        <text class="node-text-title" x="90" y="34">26. CHECK CARD ID</text>
+      </g>
+      <g class="node-group" id="node-27" transform="translate(452, 1032)">
+        <rect class="node-rect" width="180" height="60" rx="12" />
+        <text class="node-text-title" x="90" y="34">27. SIGN THE RESULT RECORD</text>
+      </g>
+      <g class="node-group node-outcome-pass" id="node-28" transform="translate(248, 1032)">
+        <rect class="node-rect" width="180" height="60" rx="30" />
+        <text class="node-text-title" x="90" y="34">28. SAVE / SYNC RESULT</text>
+      </g>
+      <g class="node-group" id="node-17" transform="translate(44, 704)">
+        <path class="node-rect" d="M 90 0 L 180 40 L 90 80 L 0 40 Z" />
+        <text class="node-text-title" x="90" y="44">17. READ THE MARK</text>
+      </g>
+    </svg>
+
+    <div class="detail-card node-popup" id="detailPanel">
+      <div class="detail-header">
+        <h3 class="detail-title" id="nodeTitle"></h3>
+      </div>
+      <p class="detail-desc" id="nodeDesc"></p>
+    </div>
+
+  </div>
+
+  <script>
+    const NODE_DETAILS = {
+  "1": {
+    "title": "1. Water Tap",
+    "sub": "",
+    "zone": "",
+    "desc": "Collect the sample from the household or village delivery tap you want to check."
+  },
+  "2": {
+    "title": "2. Flush the Tap",
+    "sub": "",
+    "zone": "",
+    "desc": "Run the tap for about 30 seconds before collecting the sample. This helps flush out water that has been sitting in the pipe."
+  },
+  "3": {
+    "title": "3. Rinse the Cup ×2",
+    "sub": "",
+    "zone": "",
+    "desc": "Rinse the 20 mL sample cup twice with the same tap water. HDPE is a common, durable plastic. The cup holds about four teaspoons, even though the test uses only part of that volume."
+  },
+  "4": {
+    "title": "4. Fill to the Line",
+    "sub": "",
+    "zone": "",
+    "desc": "Fill the cup to the 5 mL mark (about one teaspoon). The card is designed to draw a smaller portion of this sample through its test lane."
+  },
+  "5": {
+    "title": "5. Dip the Card",
+    "sub": "",
+    "zone": "",
+    "desc": "Place the card upright in the cup. Water moves along the card on its own through capillary action, similar to how a paper towel absorbs a spill."
+  },
+  "6": {
+    "title": "6. Silt Filter",
+    "sub": "",
+    "zone": "",
+    "desc": "The proposed first layer is a Whatman GF/D glass-fibre filter. It is intended to catch silt and fine rust particles, but its removal capacity—especially around 5 ppm—needs to be tested before we rely on it."
+  },
+  "7": {
+    "title": "7. pH Buffer",
+    "sub": "",
+    "zone": "",
+    "desc": "The sample then passes through a pad containing succinate, a mild buffer intended to keep the pH near 5.5. The effect of real water samples on this pH still needs testing."
+  },
+  "8": {
+    "title": "8. Iron-Binding Pad",
+    "sub": "",
+    "zone": "",
+    "desc": "The pad is designed to contain 0.4 mg of disodium EDTA, which binds some metal ions. Its ability to limit interference from dissolved iron—targeted here up to 3.0 mg/L—must be confirmed in bench tests."
+  },
+  "9": {
+    "title": "9. Reaction Lane",
+    "sub": "",
+    "zone": "",
+    "desc": "The sample moves along a narrow strip of borosilicate glass-fibre paper (grade GF MN 85/90 BF), designed to be 3 mm wide and 50 mm long. The length of the coloured bar is the main measurement."
+  },
+  "10": {
+    "title": "10. Chlorine Reacts with Dye",
+    "sub": "",
+    "zone": "",
+    "desc": "Free chlorine reacts with syringaldazine, a dye fixed along the lane at a proposed loading of 1.51 nmol/cm. The design assumes that more chlorine will produce a longer coloured bar; this relationship needs to be checked experimentally."
+  },
+  "11": {
+    "title": "11. Purple Bar Forms",
+    "sub": "",
+    "zone": "",
+    "desc": "The reaction is expected to form a purple product that marks the lane. The current calculations predict bar lengths of about 5.1 mm at 0.1 mg/L, 10.1 mm at 0.2 mg/L and 24.1 mm at 0.5 mg/L. These are target values, not validated readings."
+  },
+  "12": {
+    "title": "12. Flow Rate",
+    "sub": "",
+    "zone": "",
+    "desc": "The design targets a flow speed of about 0.87 mm/s. The reaction and flow need to be balanced so the bar edge stays readable; the proposed limit is no more than 1.5 mm of smearing. Both figures need bench validation."
+  },
+  "13": {
+    "title": "13. Absorbent Wick",
+    "sub": "",
+    "zone": "",
+    "desc": "The lane ends at an absorbent wick made from Whatman 17 Chr paper, with a proposed area of 8.0 cm². The wick is intended to draw the sample through the lane."
+  },
+  "14": {
+    "title": "14. Volume Limit (to Verify)",
+    "sub": "",
+    "zone": "",
+    "desc": "A calculation estimates that the 8.0 cm² wick could hold about 504 µL under the assumed pore-volume conditions. That does not prove it will meter exactly this volume in practice, so repeatability must be measured."
+  },
+  "15": {
+    "title": "15. Flow Ends (to Verify)",
+    "sub": "",
+    "zone": "",
+    "desc": "The design aims for flow to slow or stop as the wick fills, without a button or battery. Whether it stops consistently within 8–10 minutes—and whether the bar stops growing at the right point—still needs testing."
+  },
+  "16": {
+    "title": "16. Test Complete Mark",
+    "sub": "",
+    "zone": "",
+    "desc": "A blue line is proposed as a sign that the test has finished. Remove the card and read the printed marks by eye; a phone-based reading is an optional feature that would need to be built and tested."
+  },
+  "17": {
+    "title": "17. Read the Mark",
+    "sub": "",
+    "zone": "",
+    "desc": "No phone is needed for this step. Check where the purple bar ends against the printed marks. The reading uses bar length rather than shade matching, although the line still needs to be clear enough to see."
+  },
+  "18": {
+    "title": "18. Below 0.2 mg/L",
+    "sub": "",
+    "zone": "",
+    "desc": "A bar shorter than the proposed 10.1 mm mark indicates a reading below 0.2 mg/L. IS 10500:2012 lists a minimum free residual chlorine value of 0.2 mg/L when chlorination is used. This result concerns chlorine only; it does not determine overall drinking-water safety. The 5.1 mm mark for 0.1 mg/L is a calculated target."
+  },
+  "19": {
+    "title": "19. 0.2–0.5 mg/L Range",
+    "sub": "",
+    "zone": "",
+    "desc": "A bar between the proposed 10.1 and 24.1 mm marks corresponds to an estimated 0.2–0.5 mg/L range. It would indicate the chlorine residual only, not that the water is safe in every respect. The range must be confirmed against reference measurements."
+  },
+  "20": {
+    "title": "20. 0.5–1.0 mg/L Range",
+    "sub": "",
+    "zone": "",
+    "desc": "A bar between the proposed 24.1 and 47.1 mm marks corresponds to an estimated 0.5–1.0 mg/L range. Interpret this residual against the applicable operating guidance; the colour-to-concentration relationship needs validation."
+  },
+  "21": {
+    "title": "21. Above 1.0 mg/L",
+    "sub": "",
+    "zone": "",
+    "desc": "A bar at or beyond the proposed 47.1 mm mark would be above the design range of 1.0 mg/L. Confirm the result with a reference method and review the dosing conditions before taking action."
+  },
+  "22": {
+    "title": "22. Open the Optional App",
+    "sub": "",
+    "zone": "",
+    "desc": "The phone option is intended to work offline after setup, for example as a Progressive Web App (PWA). It is optional: the operator should still be able to read the printed marks without a phone."
+  },
+  "23": {
+    "title": "23. Scan the Card Code",
+    "sub": "",
+    "zone": "",
+    "desc": "The proposed app would scan a QR code on the card and read its encoded village identifier. With the necessary phone permissions, it could also save the test time and location. The identifier format and data workflow need to be confirmed with the relevant system."
+  },
+  "24": {
+    "title": "24. Correct Photo Angle",
+    "sub": "",
+    "zone": "",
+    "desc": "The app could correct for a tilted photo before measuring the bar. It would measure length rather than adjust the colour itself; performance still needs testing with different phones and lighting."
+  },
+  "25": {
+    "title": "25. Measure the Bar",
+    "sub": "",
+    "zone": "",
+    "desc": "The proposed app would locate the boundary between the purple bar and the background, then compare its position with printed reference marks. The target measurement error is ±0.2 mm, but this has not yet been demonstrated. Camera angle, lighting and print variation still need to be checked."
+  },
+  "26": {
+    "title": "26. Check Card ID",
+    "sub": "",
+    "zone": "",
+    "desc": "Each card could carry a unique ID, allowing the app to flag a card that has already been recorded. Reliable one-time use would depend on the app and data store being implemented and tested."
+  },
+  "27": {
+    "title": "27. Sign the Result Record",
+    "sub": "",
+    "zone": "",
+    "desc": "The app could save the result as JSON and attach an HMAC, a code generated with a secret key to help detect later changes. This depends on secure key handling and record verification; it should not be described as tamper-proof until tested."
+  },
+  "28": {
+    "title": "28. Save / Sync Result",
+    "sub": "",
+    "zone": "",
+    "desc": "A future version could store the village ID, test time and permitted location on the phone, then upload the record when a connection is available. Direct submission to an official Jal Jeevan Mission system would require confirmed access, an approved integration route and end-to-end testing."
+  }
+};
+
+    const NODE_EDGES = {};
+    document.querySelectorAll('.edge-path').forEach(p => {
+      const [a, b] = p.id.replace('edge-', '').split('-');
+      [a, b].forEach(k => { (NODE_EDGES[k] = NODE_EDGES[k] || []).push(p.id); });
+    });
+
+    let activeNodeId = null;
+
+    function showPopup(id) {
+      const popup = document.getElementById('detailPanel');
+      const nodeEl = document.getElementById(`node-${id}`);
+      if (!popup || !nodeEl) return;
+      popup.classList.add('is-visible');
+      const r = nodeEl.getBoundingClientRect();
+      const pw = popup.offsetWidth, ph = popup.offsetHeight, gap = 10;
+      let left = r.right + gap;
+      if (left + pw > window.innerWidth - 8) left = r.left - pw - gap;
+      if (left < 8) left = Math.max(8, Math.min(r.left, window.innerWidth - pw - 8));
+      let top = r.top + r.height / 2 - ph / 2;
+      top = Math.max(8, Math.min(top, window.innerHeight - ph - 8));
+      popup.style.left = left + 'px';
+      popup.style.top = top + 'px';
+    }
+
+    function hidePopup() {
+      const popup = document.getElementById('detailPanel');
+      if (popup) popup.classList.remove('is-visible');
+    }
+
+    function selectNode(id) {
+      activeNodeId = id;
+      const data = NODE_DETAILS[id];
+      
+      if (data) {
+        document.getElementById('nodeTitle').textContent = data.title;
+        document.getElementById('nodeDesc').textContent = data.desc;
+      }
+
+      document.querySelectorAll('.node-group').forEach(el => {
+        el.classList.remove('is-active');
+      });
+      const activeEl = document.getElementById(`node-${id}`);
+      if (activeEl) activeEl.classList.add('is-active');
+
+      document.querySelectorAll('.edge-path').forEach(path => {
+        path.classList.remove('is-highlighted');
+        path.setAttribute('marker-end', 'url(#lumi-caret)');
+      });
+
+      const relatedEdges = NODE_EDGES[id] || [];
+      relatedEdges.forEach(edgeId => {
+        const edgeEl = document.getElementById(edgeId);
+        if (edgeEl) {
+          edgeEl.classList.add('is-highlighted');
+          edgeEl.setAttribute('marker-end', 'url(#lumi-caret-active)');
+        }
+      });
+    }
+
+    // Wrap each step label inside its shape so long text never crosses an outline.
+    function fitNodeTitles() {
+      const svgNS = 'http://www.w3.org/2000/svg';
+      document.querySelectorAll('.node-group .node-text-title').forEach(text => {
+        const group = text.closest('.node-group');
+        const shape = group && group.querySelector('.node-rect');
+        if (!shape) return;
+
+        const original = text.dataset.originalLabel || text.textContent.trim();
+        text.dataset.originalLabel = original;
+        const box = shape.getBBox();
+        const centerX = box.x + box.width / 2;
+        const maxWidth = Math.max(90, box.width - 28);
+        const maxLines = box.height <= 44 ? 2 : 3;
+        let fontSize = box.height <= 44 ? 12 : 13;
+        let lines = [];
+        let spans = [];
+
+        const buildLines = size => {
+          text.replaceChildren();
+          text.style.fontSize = `${size}px`;
+          text.setAttribute('font-size', size);
+          lines = [];
+          spans = [];
+          const words = original.split(/\s+/);
+
+          words.forEach(word => {
+            if (!lines.length) {
+              lines.push(word);
+              const span = document.createElementNS(svgNS, 'tspan');
+              span.textContent = word;
+              text.appendChild(span);
+              spans.push(span);
+              return;
+            }
+
+            const index = lines.length - 1;
+            const candidate = `${lines[index]} ${word}`;
+            spans[index].textContent = candidate;
+            if (spans[index].getComputedTextLength() > maxWidth && lines[index]) {
+              spans[index].textContent = lines[index];
+              lines.push(word);
+              const span = document.createElementNS(svgNS, 'tspan');
+              span.textContent = word;
+              text.appendChild(span);
+              spans.push(span);
+            } else {
+              lines[index] = candidate;
+            }
+          });
+        };
+
+        buildLines(fontSize);
+        while (lines.length > maxLines && fontSize > 10.5) {
+          fontSize -= 0.5;
+          buildLines(fontSize);
+        }
+
+        // Keep multi-line labels vertically centred within their boxes.
+        const lineHeight = fontSize * 1.12;
+        const centerY = box.y + box.height / 2;
+        const firstY = centerY - ((lines.length - 1) * lineHeight) / 2 + fontSize * 0.34;
+        text.setAttribute('x', centerX);
+        spans.forEach((span, index) => {
+          span.setAttribute('x', centerX);
+          span.setAttribute('y', firstY + index * lineHeight);
+        });
+      });
+    }
+
+    // Size every label pill to its text so nothing spills out
+    function fitPills() {
+      document.querySelectorAll('.pill').forEach(g => {
+        const t = g.querySelector('text'), r = g.querySelector('rect');
+        const w = Math.ceil(t.getBBox().width) + 24;
+        r.setAttribute('width', w); r.setAttribute('x', -w / 2);
+      });
+    }
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { fitNodeTitles(); fitPills(); });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      fitNodeTitles();
+      fitPills();
+      Object.keys(NODE_DETAILS).forEach(id => {
+        const nodeEl = document.getElementById(`node-${id}`);
+        if (nodeEl) {
+          nodeEl.addEventListener('mouseenter', () => { selectNode(id); showPopup(id); });
+          nodeEl.addEventListener('mouseleave', hidePopup);
+          nodeEl.addEventListener('click', () => { selectNode(id); showPopup(id); });
+        }
+      });
+      selectNode(10);
+    });
+
+    const applyTheme = t => { 
+      document.documentElement.setAttribute('data-theme', t);
+    };
+
+    if (!document.documentElement.hasAttribute('data-theme') && window.matchMedia?.('(prefers-color-scheme: dark)').matches) {
+      applyTheme('dark');
+    }
+
+    window.addEventListener('message', e => { 
+      if (e.data?.type === 'set-theme' || e.data?.type === 'APPLY_THEME') {
+        applyTheme(e.data.theme); 
+      }
+    });
+
+    (function autoResize() {
+      function notifyHeight() {
+        const c = document.querySelector('.widget-container') || document.body;
+        if (!c) return;
+        const h = Math.ceil(Math.max(c.getBoundingClientRect().bottom, c.scrollHeight));
+        window.parent.postMessage({type: 'widget-resize', height: h}, '*');
+      }
+      window.addEventListener('load', () => setTimeout(notifyHeight, 120));
+      new ResizeObserver(() => notifyHeight()).observe(document.querySelector('.widget-container') || document.body);
+    })();
+  </script>
+</body>
+</html>
